@@ -14,7 +14,7 @@ services:
   api-stress-test:
     image: dariomr8/api-stress-test:latest
     expose:
-      - "8084"
+      - "8083"
     networks:
       - backend
 
