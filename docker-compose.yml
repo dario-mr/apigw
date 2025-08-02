@@ -24,6 +24,11 @@ services:
       - "8083"
     networks:
       - backend
+    environment:
+      DB_PASSWORD: "${DB_PASSWORD}"
+      OAUTH_CLIENT_ID: "${OAUTH_CLIENT_ID}"
+      OAUTH_CLIENT_SECRET: "${OAUTH_CLIENT_SECRET}"
+      ENCRYPTION_KEY: "${ENCRYPTION_KEY}"
 
   ichiro-family-tree:
     image: dariomr8/ichiro:latest
@@ -32,6 +37,8 @@ services:
       - "8081"
     networks:
       - backend
+    environment:
+      DB_PASSWORD: "${DB_PASSWORD}"
 
 networks:
   backend:
