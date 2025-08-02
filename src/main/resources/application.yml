@@ -5,7 +5,7 @@ spring:
   main:
     web-application-type: reactive
   cloud:
-    gateway:
+    gateway.server.webflux:
       routes:
         - id: api-stress-test
           uri: http://api-stress-test:8083

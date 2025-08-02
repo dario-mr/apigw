@@ -1,6 +1,6 @@
 spring:
   cloud:
-    gateway:
+    gateway.server.webflux:
       routes:
         - id: api-stress-test
           uri: http://localhost:8083
