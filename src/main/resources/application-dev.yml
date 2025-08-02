@@ -3,7 +3,7 @@ spring:
     gateway.server.webflux:
       routes:
         - id: api-stress-test
-          uri: http://localhost:8084
+          uri: http://localhost:8083
           predicates:
             - Path=/api-stress-test/**
           filters:
