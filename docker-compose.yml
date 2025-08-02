@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  gateway:
+    image: dariomr8/apigw:latest
+    ports:
+      - "80:8080"
+    networks:
+      - backend
+    depends_on:
+      - api-stress-test
+      - ichiro-family-tree
+
+  api-stress-test:
+    image: dariomr8/api-stress-test:latest
+    expose:
+      - "8084"
+    networks:
+      - backend
+
+  ichiro-family-tree:
+    image: dariomr8/ichiro:latest
+    expose:
+      - "8081"
+    networks:
+      - backend
+
+  redis:
+    image: redis:7
+    networks:
+      - backend
+
+networks:
+  backend:
+    driver: bridge

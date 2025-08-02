@@ -1,0 +1,25 @@
+server:
+  port: 8080
+
+spring:
+  main:
+    web-application-type: reactive
+  cloud:
+    gateway.server.webflux:
+      routes:
+        - id: api-stress-test
+          uri: http://api-stress-test:8084
+          predicates:
+            - Path=/api-stress-test/**
+          filters:
+            - RewritePath=/api-stress-test/(?<segment>.*), /${segment}
+        - id: ichiro-family-tree
+          uri: http://ichiro-family-tree:8081
+          predicates:
+            - Path=/ichiro-family-tree/**
+          filters:
+            - RewritePath=/ichiro-family-tree/(?<segment>.*), /${segment}
+  data:
+    redis:
+      host: redis
+      port: 6379

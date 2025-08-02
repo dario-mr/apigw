@@ -1,0 +1,16 @@
+spring:
+  cloud:
+    gateway.server.webflux:
+      routes:
+        - id: api-stress-test
+          uri: http://localhost:8084
+          predicates:
+            - Path=/api-stress-test/**
+          filters:
+            - RewritePath=/api-stress-test/(?<segment>.*), /${segment}
+        - id: ichiro-family-tree
+          uri: http://localhost:8081
+          predicates:
+            - Path=/ichiro-family-tree/**
+          filters:
+            - RewritePath=/ichiro-family-tree/(?<segment>.*), /${segment}
