@@ -1,16 +1,25 @@
 services:
   gateway:
     image: dariomr8/apigw:latest
+    restart: unless-stopped
     ports:
       - "80:8080"
     networks:
       - backend
     depends_on:
+      - redis
       - api-stress-test
       - ichiro-family-tree
 
+  redis:
+    image: redis:7
+    restart: unless-stopped
+    networks:
+      - backend
+
   api-stress-test:
     image: dariomr8/api-stress-test:latest
+    restart: unless-stopped
     expose:
       - "8083"
     networks:
@@ -18,13 +27,9 @@ services:
 
   ichiro-family-tree:
     image: dariomr8/ichiro:latest
+    restart: unless-stopped
     expose:
       - "8081"
-    networks:
-      - backend
-
-  redis:
-    image: redis:7
     networks:
       - backend
 
