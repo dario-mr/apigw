@@ -13,6 +13,8 @@ spring:
             - Path=/api-stress-test/**
           filters:
             - StripPrefix=1
+            - AddRequestHeader=X-Forwarded-Host, 91.99.216.115 # hetzner host
+            - AddRequestHeader=X-Forwarded-Proto, http
         - id: ichiro-family-tree
           uri: http://ichiro-family-tree:8081
           predicates:
