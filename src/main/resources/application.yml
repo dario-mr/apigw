@@ -12,8 +12,7 @@ spring:
           predicates:
             - Path=/api-stress-test/**
           filters:
-            - RewritePath=/api-stress-test/(?<segment>.*), /${segment}
-            - AddRequestHeader=X-Forwarded-Prefix, /api-stress-test
+            - StripPrefix=1
         - id: ichiro-family-tree
           uri: http://ichiro-family-tree:8081
           predicates:
