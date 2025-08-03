@@ -13,7 +13,9 @@ spring:
             - Path=/api-stress-test/**
           filters:
             - StripPrefix=1
-            - AddRequestHeader=X-Forwarded-Prefix, /api-stress-test
+            - name: DynamicForwardedHeadersFilter
+              args:
+                prefix: /api-stress-test
 
         - id: ichiro-family-tree
           uri: http://ichiro-family-tree:8081

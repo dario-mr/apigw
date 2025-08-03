@@ -7,7 +7,11 @@ spring:
           predicates:
             - Path=/api-stress-test/**
           filters:
-            - RewritePath=/api-stress-test/(?<segment>.*), /${segment}
+            - StripPrefix=1
+            - name: DynamicForwardedHeadersFilter
+              args:
+                prefix: /api-stress-test
+
         - id: ichiro-family-tree
           uri: http://localhost:8081
           predicates:
