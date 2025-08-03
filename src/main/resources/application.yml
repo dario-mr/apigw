@@ -1,6 +1,8 @@
 server:
   port: 8080
 
+hetzner.host: 91.99.216.115
+
 spring:
   main:
     web-application-type: reactive
@@ -14,14 +16,17 @@ spring:
           filters:
             - StripPrefix=1
             - AddRequestHeader=X-Forwarded-Prefix, /api-stress-test
-            - AddRequestHeader=X-Forwarded-Host, 91.99.216.115 # hetzner host
+            - AddRequestHeader=X-Forwarded-Host, ${hetzner.host}
             - AddRequestHeader=X-Forwarded-Proto, http
         - id: ichiro-family-tree
           uri: http://ichiro-family-tree:8081
           predicates:
             - Path=/ichiro-family-tree/**
           filters:
-            - RewritePath=/ichiro-family-tree/(?<segment>.*), /${segment}
+            - StripPrefix=1
+            - AddRequestHeader=X-Forwarded-Prefix, /ichiro-family-tree
+            - AddRequestHeader=X-Forwarded-Host, ${hetzner.host}
+            - AddRequestHeader=X-Forwarded-Proto, http
   data:
     redis:
       host: redis
