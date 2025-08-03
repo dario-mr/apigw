@@ -1,13 +1,18 @@
 package com.dario.gateway.filter;
 
+import static org.springframework.cloud.gateway.support.ServerWebExchangeUtils.GATEWAY_ROUTE_ATTR;
+
 import com.dario.gateway.filter.PrefixAwareForwardingFilter.Config;
+import java.net.URI;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
+import org.springframework.cloud.gateway.route.Route;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
+import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.util.UriComponentsBuilder;
 
 /**
@@ -41,6 +46,9 @@ public class PrefixAwareForwardingFilter extends AbstractGatewayFilterFactory<Co
           .build(true)
           .toUri();
 
+      var internalTarget = getInternalUri(exchange, strippedPath, original);
+      log.info("Redirecting {} to {}", original.getURI(), internalTarget);
+
       var mutated = original.mutate()
           .uri(newUri)
           .header("X-Forwarded-Host", host)
@@ -48,7 +56,6 @@ public class PrefixAwareForwardingFilter extends AbstractGatewayFilterFactory<Co
           .header("X-Forwarded-Prefix", prefix)
           .build();
 
-      log.info("Redirecting {} to {}", original.getURI(), newUri);
       return chain.filter(exchange.mutate().request(mutated).build());
     };
   }
@@ -69,6 +76,16 @@ public class PrefixAwareForwardingFilter extends AbstractGatewayFilterFactory<Co
     }
 
     return strippedPath;
+  }
+
+  private static URI getInternalUri(ServerWebExchange exchange, String strippedPath, ServerHttpRequest original) {
+    Route route = exchange.getRequiredAttribute(GATEWAY_ROUTE_ATTR);
+    var backendBase = route.getUri();
+    return UriComponentsBuilder.fromUri(backendBase)
+        .replacePath(strippedPath)
+        .query(original.getURI().getQuery())
+        .build(true)
+        .toUri();
   }
 
   @Setter
