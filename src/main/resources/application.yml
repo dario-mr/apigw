@@ -12,8 +12,7 @@ spring:
           predicates:
             - Path=/api-stress-test/**
           filters:
-            - StripPrefix=1
-            - name: DynamicForwardedHeadersFilter
+            - name: PrefixAwareForwardingFilter
               args:
                 prefix: /api-stress-test
 
@@ -22,8 +21,7 @@ spring:
           predicates:
             - Path=/ichiro-family-tree/**
           filters:
-            - StripPrefix=1
-            - name: DynamicForwardedHeadersFilter
+            - name: PrefixAwareForwardingFilter
               args:
                 prefix: /ichiro-family-tree
   data:
