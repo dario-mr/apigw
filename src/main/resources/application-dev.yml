@@ -17,4 +17,7 @@ spring:
           predicates:
             - Path=/ichiro-family-tree/**
           filters:
-            - RewritePath=/ichiro-family-tree/(?<segment>.*), /${segment}
+            - StripPrefix=1
+            - name: DynamicForwardedHeadersFilter
+              args:
+                prefix: /ichiro-family-tree

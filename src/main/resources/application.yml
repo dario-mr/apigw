@@ -23,7 +23,9 @@ spring:
             - Path=/ichiro-family-tree/**
           filters:
             - StripPrefix=1
-            - AddRequestHeader=X-Forwarded-Prefix, /ichiro-family-tree
+            - name: DynamicForwardedHeadersFilter
+              args:
+                prefix: /ichiro-family-tree
   data:
     redis:
       host: redis
