@@ -41,10 +41,7 @@ public class PrefixAwareForwardingFilter extends AbstractGatewayFilterFactory<Co
       var prefix = getOrDefault(config.getPrefix(), "");
       var strippedPath = stripPrefix(original, prefix);
 
-      var newUri = UriComponentsBuilder.fromUri(original.getURI())
-          .replacePath(strippedPath)
-          .build(true)
-          .toUri();
+      var newUri = buildNewURI(original.getURI(), strippedPath);
 
       var internalTarget = getInternalUri(exchange, strippedPath, original);
       log.info("Redirecting {} to {}", original.getURI(), internalTarget);
@@ -78,13 +75,27 @@ public class PrefixAwareForwardingFilter extends AbstractGatewayFilterFactory<Co
     return strippedPath;
   }
 
+  private static URI buildNewURI(URI originalURI, String strippedPath) {
+    try {
+      return UriComponentsBuilder.fromUri(originalURI)
+          .replacePath(strippedPath)
+          .build(true) // strict, validates & encodes
+          .toUri();
+    } catch (IllegalArgumentException e) {
+      return UriComponentsBuilder.fromUri(originalURI)
+          .replacePath(strippedPath)
+          .build(false) // lenient, skip the component validation/encoding to avoid the error
+          .toUri();
+    }
+  }
+
   private static URI getInternalUri(ServerWebExchange exchange, String strippedPath, ServerHttpRequest original) {
     Route route = exchange.getRequiredAttribute(GATEWAY_ROUTE_ATTR);
     var backendBase = route.getUri();
     return UriComponentsBuilder.fromUri(backendBase)
         .replacePath(strippedPath)
         .query(original.getURI().getQuery())
-        .build(true)
+        .build(false)
         .toUri();
   }
 
