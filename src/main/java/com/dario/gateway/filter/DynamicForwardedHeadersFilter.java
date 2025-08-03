@@ -33,7 +33,7 @@ public class DynamicForwardedHeadersFilter extends AbstractGatewayFilterFactory<
           .header("X-Forwarded-Prefix", prefix)
           .build();
 
-      log.info("Overriding headers: \nX-Forwarded-Proto = {}\nX-Forwarded-Host = {}\nX-Forwarded-Prefix = {}",
+      log.info("Overriding headers: [X-Forwarded-Proto = {}, X-Forwarded-Host = {}, X-Forwarded-Prefix = {}]",
           scheme, host, prefix);
 
       return chain.filter(exchange.mutate().request(mutated).build());
