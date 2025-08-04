@@ -1,10 +1,10 @@
 dariolab.com, www.dariolab.com {
-#    header {
-#        Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
-#        X-Frame-Options "DENY"
-#        X-Content-Type-Options "nosniff"
-#        -Server
-#    }
+    header {
+        Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
+        X-Frame-Options "DENY"
+        X-Content-Type-Options "nosniff"
+        -Server
+    }
 
     reverse_proxy gateway:8080
 }
