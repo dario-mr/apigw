@@ -1,10 +1,12 @@
 package com.dario.gateway.filter;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.springframework.cloud.gateway.support.ServerWebExchangeUtils.GATEWAY_ROUTE_ATTR;
 import static org.springframework.util.StringUtils.hasText;
 
 import com.dario.gateway.filter.PrefixAwareForwardingFilter.Config;
 import java.net.URI;
+import java.net.URLEncoder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -85,16 +87,42 @@ public class PrefixAwareForwardingFilter extends AbstractGatewayFilterFactory<Co
   }
 
   private static URI buildNewURI(URI originalURI, String strippedPath) {
+    // Attempt strict build first
     try {
       return UriComponentsBuilder.fromUri(originalURI)
           .replacePath(strippedPath)
-          .build(true) // strict, validates & encodes
+          .build(true)
           .toUri();
     } catch (IllegalArgumentException e) {
-      return UriComponentsBuilder.fromUri(originalURI)
-          .replacePath(strippedPath)
-          .build(false) // lenient, skip the component validation/encoding to avoid the error
-          .toUri();
+      // /VAADIN/push contains illegal characters in query (e.g., unencoded semicolon in Content-Type)
+      try {
+        var uriBuilder = UriComponentsBuilder.fromUri(originalURI)
+            .replacePath(strippedPath);
+
+        // Get raw query params once (lenient)
+        var queryParams = UriComponentsBuilder.fromUri(originalURI)
+            .build(false)
+            .getQueryParams();
+
+        var contentType = queryParams.getFirst("Content-Type");
+        if (contentType != null && contentType.contains(";")) {
+          var encodedContentType = URLEncoder.encode(contentType, UTF_8);
+          uriBuilder.replaceQueryParam("Content-Type", encodedContentType);
+        } else {
+          uriBuilder.replaceQueryParams(queryParams);
+        }
+
+        var sanitizedURI = uriBuilder.build(true).toUri();
+        log.info("Sanitized URI built: original=[{}], sanitized=[{}]", originalURI, sanitizedURI);
+        return sanitizedURI;
+      } catch (Exception ex) {
+        log.warn("Failed to build URI for original URI [{}], error: [{}], falling back to build with no encoding",
+            originalURI, ex.getMessage());
+        return UriComponentsBuilder.fromUri(originalURI)
+            .replacePath(strippedPath)
+            .build(false)
+            .toUri();
+      }
     }
   }
 
