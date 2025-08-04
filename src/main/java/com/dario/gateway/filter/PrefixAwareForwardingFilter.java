@@ -1,6 +1,7 @@
 package com.dario.gateway.filter;
 
 import static org.springframework.cloud.gateway.support.ServerWebExchangeUtils.GATEWAY_ROUTE_ATTR;
+import static org.springframework.util.StringUtils.hasText;
 
 import com.dario.gateway.filter.PrefixAwareForwardingFilter.Config;
 import java.net.URI;
@@ -36,9 +37,11 @@ public class PrefixAwareForwardingFilter extends AbstractGatewayFilterFactory<Co
     return (exchange, chain) -> {
       var original = exchange.getRequest();
 
-      var host = getOrDefault(original.getHeaders().getFirst("Host"), "");
-      var scheme = getOrDefault(original.getURI().getScheme(), "http");
-      var prefix = getOrDefault(config.getPrefix(), "");
+      var host = getOrDefault("", original.getHeaders().getFirst("Host"));
+      var scheme = getOrDefault("http",
+          original.getHeaders().getFirst("X-Forwarded-Proto"),
+          original.getURI().getScheme());
+      var prefix = getOrDefault("", config.getPrefix());
       var strippedPath = stripPrefix(original, prefix);
 
       var newUri = buildNewURI(original.getURI(), strippedPath);
@@ -57,8 +60,14 @@ public class PrefixAwareForwardingFilter extends AbstractGatewayFilterFactory<Co
     };
   }
 
-  private static String getOrDefault(String value, String defaultValue) {
-    return value == null ? defaultValue : value;
+  private static String getOrDefault(String defaultValue, String... values) {
+    for (String value : values) {
+      if (hasText(value)) {
+        return value;
+      }
+    }
+
+    return defaultValue;
   }
 
   private static String stripPrefix(ServerHttpRequest original, String prefix) {
