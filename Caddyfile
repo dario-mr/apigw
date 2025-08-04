@@ -1,9 +1,4 @@
 dariolab.com, www.dariolab.com {
-    tls {
-        # Only speak HTTP/1.1 to clients, so WebSocket upgrade works (required by vaadin push mechanism)
-        alpn http/1.1
-    }
-
     header {
         Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
         X-Frame-Options "DENY"
