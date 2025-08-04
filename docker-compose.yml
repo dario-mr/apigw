@@ -4,6 +4,8 @@ services:
     restart: unless-stopped
     networks:
       - backend
+    ports:
+      - "127.0.0.1:8080:8080"  # expose only to host, not public
     depends_on:
       - redis
       - api-stress-test
