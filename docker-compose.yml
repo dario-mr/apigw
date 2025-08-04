@@ -2,8 +2,6 @@ services:
   gateway:
     image: dariomr8/apigw:latest
     restart: unless-stopped
-    ports:
-      - "80:8080"
     networks:
       - backend
     depends_on:
