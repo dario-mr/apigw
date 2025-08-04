@@ -56,7 +56,6 @@ services:
       - backend
     environment:
       DB_PASSWORD: "${DB_PASSWORD}"
-      PORT: "8081"
 
   shortly:
     image: dariomr8/shortly:latest
