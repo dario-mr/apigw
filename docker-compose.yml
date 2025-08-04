@@ -26,6 +26,7 @@ services:
       - redis
       - api-stress-test
       - ichiro-family-tree
+      - shortly
 
   redis:
     image: redis:7
@@ -55,6 +56,7 @@ services:
       - backend
     environment:
       DB_PASSWORD: "${DB_PASSWORD}"
+      PORT: "8081"
 
   shortly:
     image: dariomr8/shortly:latest
