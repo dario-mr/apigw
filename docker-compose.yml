@@ -1,4 +1,19 @@
 services:
+  caddy:
+    image: caddy:2.10.0
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    networks:
+      - backend
+    depends_on:
+      - gateway
+
   gateway:
     image: dariomr8/apigw:latest
     restart: unless-stopped
@@ -43,3 +58,7 @@ services:
 networks:
   backend:
     driver: bridge
+
+volumes:
+  caddy_data:
+  caddy_config:
