@@ -24,6 +24,14 @@ spring:
             - name: PrefixAwareForwardingFilter
               args:
                 prefix: /ichiro-family-tree
+        - id: shortly
+          uri: http://shortly:8082
+          predicates:
+            - Path=/shortly/**
+          filters:
+            - name: PrefixAwareForwardingFilter
+              args:
+                prefix: /shortly
   data:
     redis:
       host: redis

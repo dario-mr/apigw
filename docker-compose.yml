@@ -56,6 +56,16 @@ services:
     environment:
       DB_PASSWORD: "${DB_PASSWORD}"
 
+  shortly:
+    image: dariomr8/shortly:latest
+    restart: unless-stopped
+    expose:
+      - "8082"
+    networks:
+      - backend
+    environment:
+      DB_PASSWORD: "${DB_PASSWORD}"
+
 networks:
   backend:
     driver: bridge

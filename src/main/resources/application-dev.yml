@@ -19,3 +19,11 @@ spring:
             - name: PrefixAwareForwardingFilter
               args:
                 prefix: /ichiro-family-tree
+        - id: shortly
+          uri: http://localhost:8082
+          predicates:
+            - Path=/shortly/**
+          filters:
+            - name: PrefixAwareForwardingFilter
+              args:
+                prefix: /shortly
