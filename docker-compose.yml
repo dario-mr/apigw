@@ -27,6 +27,7 @@ services:
       - api-stress-test
       - ichiro-family-tree
       - shortly
+      - ichiro-walks
 
   redis:
     image: redis:7
@@ -62,6 +63,16 @@ services:
     restart: unless-stopped
     expose:
       - "8082"
+    networks:
+      - backend
+    environment:
+      DB_PASSWORD: "${DB_PASSWORD}"
+
+  ichiro-walks:
+    image: dariomr8/ichiro-walks:latest
+    restart: unless-stopped
+    expose:
+      - "8085"
     networks:
       - backend
     environment:

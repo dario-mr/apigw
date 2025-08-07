@@ -19,6 +19,7 @@ spring:
             - name: PrefixAwareForwardingFilter
               args:
                 prefix: /ichiro-family-tree
+
         - id: shortly
           uri: http://localhost:8082
           predicates:
@@ -27,3 +28,12 @@ spring:
             - name: PrefixAwareForwardingFilter
               args:
                 prefix: /shortly
+
+        - id: ichiro-walks
+          uri: http://localhost:8085
+          predicates:
+            - Path=/ichiro-walks/**
+          filters:
+            - name: PrefixAwareForwardingFilter
+              args:
+                prefix: /ichiro-walks
