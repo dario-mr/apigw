@@ -21,7 +21,6 @@ services:
       - backend
     ports:
       - "127.0.0.1:8080:8080"  # expose only to host, not public
-      - "81:8080" # test to check if without caddy I still get vaadin hard refreshes
     depends_on:
       - redis
       - api-stress-test
