@@ -2,6 +2,12 @@ spring:
   cloud:
     gateway.server.webflux:
       routes:
+        - id: lab-home
+          order: 100
+          uri: http://localhost:80
+          predicates:
+            - Path=/, /index.html, /assets/**, /icons/**, /favicon.ico
+
         - id: api-stress-test
           uri: http://localhost:8083
           predicates:
