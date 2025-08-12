@@ -14,6 +14,28 @@ services:
     depends_on:
       - gateway
 
+  watchtower:
+    image: containrrr/watchtower:latest
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      WATCHTOWER_POLL_INTERVAL: 300
+      WATCHTOWER_CLEANUP: true
+      WATCHTOWER_NOTIFICATIONS: email
+      WATCHTOWER_NOTIFICATION_EMAIL_FROM: dario.mauri9@gmail.com
+      WATCHTOWER_NOTIFICATION_EMAIL_TO: dario.mauri9@gmail.com
+      WATCHTOWER_NOTIFICATION_EMAIL_SERVER: smtp.gmail.com
+      WATCHTOWER_NOTIFICATION_EMAIL_SERVER_PORT: 587
+      WATCHTOWER_NOTIFICATION_EMAIL_SERVER_USER: dario.mauri9@gmail.com
+      WATCHTOWER_NOTIFICATION_EMAIL_SERVER_PASSWORD: "${EMAIL_SERVER_PASSWORD}"
+
+  redis:
+    image: redis:7
+    restart: unless-stopped
+    networks:
+      - backend
+
   gateway:
     image: dariomr8/apigw:latest
     restart: unless-stopped
@@ -34,12 +56,6 @@ services:
     restart: unless-stopped
     expose:
       - "80"
-    networks:
-      - backend
-
-  redis:
-    image: redis:7
-    restart: unless-stopped
     networks:
       - backend
 
