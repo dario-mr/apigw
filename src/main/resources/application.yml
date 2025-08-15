@@ -54,6 +54,15 @@ spring:
             - name: PrefixAwareForwardingFilter
               args:
                 prefix: /ichiro-walks
+
+        - id: portainer
+          uri: http://portainer:9000
+          predicates:
+            - Path=/portainer/**
+          filters:
+            - name: PrefixAwareForwardingFilter
+              args:
+                prefix: /portainer
   data:
     redis:
       host: redis

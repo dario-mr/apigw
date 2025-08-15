@@ -40,9 +40,15 @@ docker compose up -d --force-recreate
 docker compose up -d --force-recreate --no-deps gateway
 ```
 
-### Clean up
+### Clean unused images
 
-Stops and removes the containers, networks, and default volumes that were created by `docker compose up`.
+```shell
+docker image prune -f
+```
+
+### Purge everything
+
+Stops and removes all containers, networks, and volumes that were created by `docker compose up`.
 
 Use carefully.
 

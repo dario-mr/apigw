@@ -43,3 +43,12 @@ spring:
             - name: PrefixAwareForwardingFilter
               args:
                 prefix: /ichiro-walks
+
+        - id: portainer
+          uri: http://localhost:9000
+          predicates:
+            - Path=/portainer/**
+          filters:
+            - name: PrefixAwareForwardingFilter
+              args:
+                prefix: /portainer

@@ -40,9 +40,11 @@ public class PrefixAwareForwardingFilter extends AbstractGatewayFilterFactory<Co
       var original = exchange.getRequest();
 
       var host = getOrDefault("", original.getHeaders().getFirst("Host"));
-      var scheme = getOrDefault("http",
+      var scheme = getOrDefault(
+          "http",
           original.getHeaders().getFirst("X-Forwarded-Proto"),
-          original.getURI().getScheme());
+          original.getURI().getScheme()
+      );
       var prefix = getOrDefault("", config.getPrefix());
       var strippedPath = stripPrefix(original, prefix);
 

@@ -102,6 +102,20 @@ services:
     environment:
       DB_PASSWORD: "${DB_PASSWORD}"
 
+  portainer:
+    image: portainer/portainer-ce:latest
+    restart: unless-stopped
+    command: [ "--http-enabled" ]  # opens internal HTTP on 9000
+    expose:
+      - "9000"
+    networks:
+      - backend
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+    security_opt:
+      - no-new-privileges:true
+
 networks:
   backend:
     driver: bridge
@@ -109,3 +123,4 @@ networks:
 volumes:
   caddy_data:
   caddy_config:
+  portainer_data:
