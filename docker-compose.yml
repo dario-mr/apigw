@@ -105,7 +105,12 @@ services:
   portainer:
     image: portainer/portainer-ce:latest
     restart: unless-stopped
-    command: [ "--http-enabled" ]  # opens internal HTTP on 9000
+    command:
+      - --http-enabled                    # keep HTTP internally
+      - --base-url
+      - /portainer                        # match spring gateway configuration
+      - --trusted-origins
+      - dariolab.com,www.dariolab.com
     expose:
       - "9000"
     networks:
