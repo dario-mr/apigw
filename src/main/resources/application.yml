@@ -6,6 +6,12 @@ spring:
     web-application-type: reactive
   cloud:
     gateway.server.webflux:
+      default-filters:
+        - name: RequestRateLimiter
+          args:
+            key-resolver: "#{@ipKeyResolver}"
+            redis-rate-limiter.replenishRate: 10
+            redis-rate-limiter.burstCapacity: 20
       routes:
         - id: lab-home
           order: 100
