@@ -14,8 +14,8 @@ Lightweight, self-contained API gateway with auto-TLS and path-prefix routing.
 2. Edit the config files if you need to change hostnames, paths, or behavior:
     - [Caddyfile](Caddyfile): defines the public domain, TLS/Let’s Encrypt setup, security headers, and reverse-proxy
       rules into the gateway.
-    - [docker-compose.yml](docker-compose.yml): orchestrates the whole stack (Caddy, gateway, Redis, and backend
-      services), networking, and volume persistence.
+    - [docker-compose.yml](docker-compose.yml): orchestrates the whole stack (Caddy, gateway, and backend services),
+      networking, and volume persistence.
     - [application.yml](src/main/resources/application.yml): config for the Spring Cloud Gateway itself - route
       prefixes, forwarding logic, and downstream service addresses.
 3. Start everything:
