@@ -1,9 +1,6 @@
 services:
   caddy:
-    build:
-      context: .
-      dockerfile: Dockerfile.caddy
-    image: caddy-with-ratelimit:2.10.0
+    image: dariomr8/caddy-with-ratelimit:2.10.0
     restart: unless-stopped
     ports:
       - "80:80"
