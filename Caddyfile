@@ -12,17 +12,19 @@ dariolab.com, www.dariolab.com {
   }
 
   header {
-      Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
-      X-Frame-Options "DENY"
-      X-Content-Type-Options "nosniff"
-      -Server
+    Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
+    X-Frame-Options "DENY"
+    X-Content-Type-Options "nosniff"
+    -Server
   }
 
   rate_limit {
-    zone per_ip_api {
-      match { path /api-stress-test/* /ichiro-family-tree/* /shortly/* /ichiro-walks/* /portainer/* }
+    zone per_ip_app {
+      match {
+        path /api-stress-test/* /ichiro-family-tree/* /shortly/* /ichiro-walks/* /portainer/*
+      }
       key    {remote_host}
-      events 60
+      events 50
       window 10s
     }
   }
