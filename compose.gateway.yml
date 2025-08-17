@@ -4,11 +4,10 @@ services:
     restart: unless-stopped
     networks:
       - backend
-    ports:
-      - "127.0.0.1:8080:8080"  # expose only to host, not public
+    expose:
+      - "8080"
     depends_on:
       - lab-home
-      - redis
       - api-stress-test
       - ichiro-family-tree
       - shortly
