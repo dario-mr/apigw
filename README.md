@@ -87,3 +87,18 @@ caddy fmt --overwrite
 docker compose exec caddy \
   caddy validate --config /etc/caddy/Caddyfile --adapter caddyfile
 ```
+
+### fail2ban
+
+```shell
+# check jails
+docker compose exec fail2ban fail2ban-client status
+docker compose exec fail2ban fail2ban-client status caddy-429
+docker compose exec fail2ban fail2ban-client status caddy-badpaths
+
+# list banned IPs
+docker compose exec fail2ban fail2ban-client banned
+
+# unban
+docker compose exec fail2ban fail2ban-client set caddy-429 unbanip 1.2.3.4
+```

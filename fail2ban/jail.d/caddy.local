@@ -1,0 +1,21 @@
+# Ban IPs that hit too many 429s quickly
+[caddy-429]
+enabled   = true
+filter    = caddy-429
+logpath   = /var/log/caddy/access.log
+findtime  = 30s
+maxretry  = 80
+bantime   = 15m
+backend   = auto
+action    = iptables-multiport[name=caddy429, port="80,443", chain="DOCKER-USER"]
+
+# Ban common scanners/probers
+[caddy-badpaths]
+enabled   = true
+filter    = caddy-badpaths
+logpath   = /var/log/caddy/access.log
+findtime  = 2m
+maxretry  = 5
+bantime   = 1h
+backend   = auto
+action    = iptables-multiport[name=caddybad, port="80,443", chain="DOCKER-USER"]
