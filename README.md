@@ -5,6 +5,7 @@ Lightweight, self-contained API gateway with auto-TLS and path-prefix routing.
 ## Components
 
 - **Caddy**: HTTP → HTTPS, rate limiting, security headers, reverse-proxy to Gateway.
+- **fail2ban**: watches caddy logs for bad behavior patterns and then blocks the IP at the OS firewall level.
 - **Gateway**: Spring Cloud Gateway with prefix stripping and `X-Forwarded-*` support for proper redirects.
 - **Watchtower**: Automatically pull new docker images.
 - **Portainer**: Dashboard to manage docker containers.
@@ -20,6 +21,7 @@ Lightweight, self-contained API gateway with auto-TLS and path-prefix routing.
       networking, and volume persistence.
     - [application.yml](src/main/resources/application.yml): config for the Spring Cloud Gateway itself - route
       prefixes, forwarding logic, and downstream service addresses.
+    - [ban rules](fail2ban/jail.d/caddy.local): configures IP banning rules.
 3. Start everything:
    ```shell
    docker compose up -d --build
@@ -91,6 +93,9 @@ docker compose exec caddy \
 ### fail2ban
 
 ```shell
+# reload configs
+docker compose exec fail2ban fail2ban-client reload
+
 # check jails
 docker compose exec fail2ban fail2ban-client status
 docker compose exec fail2ban fail2ban-client status caddy-429
