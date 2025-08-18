@@ -6,6 +6,7 @@ include:
   - compose.portainer.yml
   - compose.gateway.yml
   - compose.apps.yml
+  - compose.fail2ban.yml
 
 networks:
   backend:
