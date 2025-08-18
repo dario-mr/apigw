@@ -10,8 +10,8 @@ bantime.maxtime   = 1w
 enabled  = true
 filter   = caddy-429
 logpath  = /var/log/caddy/access.log
-maxretry = 12
-findtime = 2m
+maxretry = 20
+findtime = 1m
 bantime  = 1h
 action   = iptables-multiport[name=caddy-429, port="80,443", chain=DOCKER-USER]
 

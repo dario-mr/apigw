@@ -32,7 +32,7 @@ dariolab.com, www.dariolab.com {
 				path /api-stress-test/* /ichiro-family-tree/* /shortly/* /ichiro-walks/* /portainer/*
 			}
 			key {remote_host}
-			events 50
+			events 100
 			window 10s
 		}
 	}
