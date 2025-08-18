@@ -7,5 +7,5 @@ services:
       - NET_ADMIN
       - NET_RAW
     volumes:
-      - ./fail2ban:/config
+      - ./fail2ban-config:/config
       - /var/log:/var/log:ro
