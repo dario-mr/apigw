@@ -1,4 +1,4 @@
-# Repeat offenders stay away longer
+# Repeat offenders are banned for increasingly longer periods
 [DEFAULT]
 bantime.increment = true
 bantime.factor    = 2
