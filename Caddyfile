@@ -37,5 +37,23 @@ dariolab.com, www.dariolab.com {
 		}
 	}
 
-	reverse_proxy gateway:8080
+	# Allowed paths
+	@allowed {
+		path / /index.html
+		path /assets/* /static/* /icons/* /locales/*
+		path /robots.txt /sitemap.xml /manifest.json /site.webmanifest
+		path /apple-touch-icon*.png /.well-known/acme-challenge/*
+		path /api-stress-test/* /ichiro-family-tree/* /shortly/* /ichiro-walks/* /portainer/*
+	}
+
+	# Allowed → proxy
+	handle @allowed {
+		reverse_proxy gateway:8080
+	}
+
+	# Everything else → 404 + mark header
+	handle {
+		header X-Unknown-Path "1"
+		respond 404
+	}
 }
