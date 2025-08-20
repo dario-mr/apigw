@@ -4,9 +4,12 @@ Lightweight, self-contained API gateway with auto-TLS and path-prefix routing.
 
 ## Components
 
-- **Caddy**: automatic HTTP → HTTPS redirect, rate limiting, security headers, reverse-proxy to Gateway.
-- **Gateway**: Spring Cloud Gateway with prefix stripping and `X-Forwarded-*` support for proper redirects.
-- **fail2ban**: watches caddy logs for bad behavior patterns and then blocks the IP at the OS firewall level.
+- **Caddy**: automatic HTTP → HTTPS redirect, rate limiting, security headers, reverse-proxy to
+  Gateway.
+- **Gateway**: Spring Cloud Gateway with prefix stripping and `X-Forwarded-*` support for proper
+  redirects.
+- **fail2ban**: watches caddy logs for bad behavior patterns and then blocks the IP at the OS
+  firewall level.
 - **Watchtower**: Automatically pull new docker images.
 - **Portainer**: Dashboard to manage docker containers.
 - **Backends**: `api-stress-test`, `ichiro-family-tree`, etc.
@@ -15,11 +18,14 @@ Lightweight, self-contained API gateway with auto-TLS and path-prefix routing.
 
 1. Make sure the domain (e.g. `dariolab.com`, `www.dariolab.com`) is pointing to the server’s IP.
 2. Edit the config files if you need to change hostnames, paths, or behavior:
-    - [docker-compose.yml](docker-compose.yml): orchestrates the whole stack (Caddy, gateway, and backend services),
+    - [docker-compose.yml](docker-compose.yml): orchestrates the whole stack (Caddy, gateway, and
+      backend services),
       networking, and volume persistence.
-    - [Caddyfile](Caddyfile): defines the public domain, TLS/Let’s Encrypt setup, rate limits, security headers, and
+    - [Caddyfile](Caddyfile): defines the public domain, TLS/Let’s Encrypt setup, rate limits,
+      security headers, and
       reverse-proxy rules into the gateway.
-    - [gateway config](src/main/resources/application.yml): config for the Spring Cloud Gateway itself - route
+    - [gateway config](src/main/resources/application.yml): config for the Spring Cloud Gateway
+      itself - route
       prefixes, forwarding logic, and downstream service addresses.
     - [ban rules](fail2ban/jail.d/caddy.local): configures IP banning rules.
 3. Start everything:
@@ -79,15 +85,17 @@ Use carefully.
 docker compose down --remove-orphans
 ```
 
-### Validate and format Caddyfile
+### Caddyfile
 
 ```shell
-caddy validate
+# format
 caddy fmt --overwrite
 
-# alternative: validate from a running container (easier with plugins)
-docker compose exec caddy \
-  caddy validate --config /etc/caddy/Caddyfile --adapter caddyfile
+# from the container (easier with plugins)
+# validate
+docker compose exec caddy caddy validate --config /etc/caddy/Caddyfile --adapter caddyfile
+# reload Caddyfile
+docker compose exec caddy caddy reload   --config /etc/caddy/Caddyfile --adapter caddyfile
 ```
 
 ### fail2ban
