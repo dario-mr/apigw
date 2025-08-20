@@ -18,25 +18,6 @@ dariolab.com, www.dariolab.com {
 		-Server
 	}
 
-	rate_limit {
-		# Global limit
-		zone per_ip_global {
-			key {remote_host}
-			events 300
-			window 10s
-		}
-
-		# App paths (stricter)
-		zone per_ip_app {
-			match {
-				path /api-stress-test/* /ichiro-family-tree/* /shortly/* /ichiro-walks/* /portainer/*
-			}
-			key {remote_host}
-			events 100
-			window 10s
-		}
-	}
-
 	# Allowed paths
 	@allowed {
 		path / /index.html
@@ -46,8 +27,27 @@ dariolab.com, www.dariolab.com {
 		path /api-stress-test/* /ichiro-family-tree/* /shortly/* /ichiro-walks/* /portainer/*
 	}
 
-	# Allowed → proxy
+	# Allowed → rate limit, then forward to gateway
 	handle @allowed {
+		rate_limit {
+			# Global limit
+			zone per_ip_global {
+				key {remote_host}
+				events 300
+				window 10s
+			}
+
+			# App paths (stricter)
+			zone per_ip_app {
+				match {
+					path /api-stress-test/* /ichiro-family-tree/* /shortly/* /ichiro-walks/* /portainer/*
+				}
+				key {remote_host}
+				events 100
+				window 10s
+			}
+		}
+
 		reverse_proxy gateway:8080
 	}
 
