@@ -43,7 +43,6 @@ dariolab.com, www.dariolab.com {
 		path /assets/* /static/* /icons/* /locales/*
 		path /robots.txt /sitemap.xml /manifest.json /site.webmanifest
 		path /apple-touch-icon*.png /.well-known/acme-challenge/*
-		path https://cdn.matomo.cloud/portainer-ce.matomo.cloud/matomo.js
 		path /api-stress-test/* /ichiro-family-tree/* /shortly/* /ichiro-walks/* /portainer/*
 	}
 
