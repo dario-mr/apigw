@@ -24,10 +24,10 @@ dariolab.com, www.dariolab.com {
 		path /assets/* /static/* /icons/* /locales/*
 		path /robots.txt /sitemap.xml /manifest.json /site.webmanifest
 		path /apple-touch-icon*.png /.well-known/acme-challenge/*
-		path /api-stress-test/* /ichiro-family-tree/* /shortly/* /ichiro-walks/* /portainer/*
+		path /api-stress-test/* /ichiro-family-tree/* /shortly/* /ichiro-walks/* /portainer/* /grafana/*
 	}
 
-	# Allowed → rate limit, then forward to gateway
+	# Allowed → rate limit, then route to the right upstream
 	handle @allowed {
 		rate_limit {
 			# Global limit
@@ -48,10 +48,23 @@ dariolab.com, www.dariolab.com {
 			}
 		}
 
-		reverse_proxy gateway:8080
+		route {
+			# grafana is routed manually (for now)
+			@grafana path /grafana/*
+			handle @grafana {
+				reverse_proxy grafana:3000 {
+					header_up X-Forwarded-Proto {scheme}
+				}
+			}
+
+			# everything else in @allowed goes to gateway
+			handle {
+				reverse_proxy gateway:8080
+			}
+		}
 	}
 
-	# Everything else → 404 + mark header
+	# Everything else → 404
 	handle {
 		header X-Unknown-Path "1"
 		respond 404

@@ -112,4 +112,5 @@ docker compose exec fail2ban fail2ban-client banned
 
 # unban
 docker compose exec fail2ban fail2ban-client set caddy-429 unbanip 86.49.248.100
+docker compose exec fail2ban fail2ban-client set caddy-unknownpaths unbanip 86.49.248.100
 ```
