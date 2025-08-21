@@ -18,7 +18,20 @@ dariolab.com, www.dariolab.com {
 		-Server
 	}
 
-	# Allowed paths
+	handle_path /goaccess/* {
+		root * /var/goaccess
+		file_server
+	}
+
+	@goaccess_ws {
+		path /goaccess-ws /goaccess-ws/*
+	}
+	handle @goaccess_ws {
+		uri strip_prefix /goaccess-ws
+		reverse_proxy goaccess:7890
+	}
+
+	# Allowed paths for your app
 	@allowed {
 		path / /index.html
 		path /assets/* /static/* /icons/* /locales/*
