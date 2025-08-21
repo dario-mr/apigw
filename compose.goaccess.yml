@@ -1,0 +1,16 @@
+services:
+  goaccess:
+    image: allinurl/goaccess:latest
+    restart: unless-stopped
+    command:
+      - /logs/access.log
+      - --log-format=CADDY
+      - --real-time-html
+      - --ws-url=wss://dariolab.com/goaccess-ws
+      - --port=7890
+      - -o
+      - /var/goaccess/index.html
+    volumes:
+      - /var/log/caddy:/logs:ro
+      - /var/goaccess:/var/goaccess
+    networks: [ backend ]

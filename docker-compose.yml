@@ -7,6 +7,7 @@ include:
   - compose.gateway.yml
   - compose.apps.yml
   - compose.fail2ban.yml
+  - compose.goaccess.yml
 
 networks:
   backend:
