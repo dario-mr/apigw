@@ -1,6 +1,12 @@
 server:
   port: 8080
 
+logging:
+  level:
+    root: INFO
+    org.springframework.cloud.gateway: WARN
+    your.pkg.RouteMappingLogFilter: INFO
+
 spring:
   main:
     web-application-type: reactive
