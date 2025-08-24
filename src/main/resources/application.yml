@@ -64,4 +64,3 @@ spring:
             - Path=/grafana/**
           filters:
             - AddRequestHeader=X-Forwarded-Prefix, /grafana
-            - PreserveHostHeader
