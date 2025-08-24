@@ -4,7 +4,7 @@ services:
     restart: unless-stopped
     command: -config.file=/etc/loki/local-config.yaml
     volumes:
-      - ./loki/local-config.yaml:/etc/loki/local-config.yaml:ro
+      - ./grafana/loki/local-config.yaml:/etc/loki/local-config.yaml:ro
       - loki_data:/loki
     networks: [ backend ]
 
@@ -17,9 +17,10 @@ services:
     environment:
       PROMTAIL_HOST_LABEL: ${PROMTAIL_HOST_LABEL}
     volumes:
-      - ./promtail/config.yml:/etc/promtail/config.yml:ro
+      - ./grafana/promtail/config.yml:/etc/promtail/config.yml:ro
       - /var/log/caddy:/var/log/caddy:ro
       - promtail_pos:/var/lib/promtail
+      - ./grafana/geoip/GeoLite2-City.mmdb:/etc/promtail/GeoLite2-City.mmdb:ro
     networks: [ backend ]
     depends_on: [ loki ]
 
