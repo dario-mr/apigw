@@ -27,9 +27,8 @@ spring:
           predicates:
             - Path=/ichiro-family-tree/**
           filters:
-            - name: PrefixAwareForwardingFilter
-              args:
-                prefix: /ichiro-family-tree
+            - StripPrefix=1
+            - AddRequestHeader=X-Forwarded-Prefix, /ichiro-family-tree
 
         - id: shortly
           uri: http://shortly:8082
