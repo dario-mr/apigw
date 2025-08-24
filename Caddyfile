@@ -48,20 +48,7 @@ dariolab.com, www.dariolab.com {
 			}
 		}
 
-		route {
-			# grafana is routed manually (for now)
-			@grafana path /grafana/*
-			handle @grafana {
-				reverse_proxy grafana:3000 {
-					header_up X-Forwarded-Proto {scheme}
-				}
-			}
-
-			# everything else in @allowed goes to gateway
-			handle {
-				reverse_proxy gateway:8080
-			}
-		}
+		reverse_proxy gateway:8080
 	}
 
 	# Everything else → 404
