@@ -12,6 +12,12 @@ Lightweight, self-contained API gateway with auto-TLS and path-prefix routing.
   firewall level.
 - **Watchtower**: Automatically pull new docker images.
 - **Portainer**: Dashboard to manage docker containers.
+- **Observability**:
+    - **Promtail**: tails Caddy’s JSON access logs, parses fields (status, uri, size, duration),
+      enriches GeoIP, and ships to Loki.
+    - **Loki**: log database (label-based index) storing the ingested logs efficiently.
+    - **Grafana**: dashboards querying Loki for "who/when/how much" (requests, status, bandwidth,
+      latency). Served via Caddy under `/grafana/`.
 - **Backends**: `api-stress-test`, `ichiro-family-tree`, etc.
 
 ## How to run
@@ -112,4 +118,5 @@ docker compose exec fail2ban fail2ban-client banned
 
 # unban
 docker compose exec fail2ban fail2ban-client set caddy-429 unbanip 86.49.248.100
+docker compose exec fail2ban fail2ban-client set caddy-unknownpaths unbanip 86.49.248.100
 ```

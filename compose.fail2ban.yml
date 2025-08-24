@@ -7,10 +7,10 @@ services:
       - NET_ADMIN
       - NET_RAW
     environment:
-      - TZ=Europe/Prague
-      - F2B_LOG_TARGET=STDOUT
-      - F2B_LOG_LEVEL=INFO
-      - IPTABLES_MODE=auto
+      TZ: ${TIMEZONE}
+      F2B_LOG_TARGET: STDOUT
+      F2B_LOG_LEVEL: INFO
+      IPTABLES_MODE: auto
     volumes:
       - ./fail2ban:/data
       - /var/log/caddy:/var/log/caddy:ro
