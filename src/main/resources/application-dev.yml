@@ -13,42 +13,45 @@ spring:
           predicates:
             - Path=/api-stress-test/**
           filters:
-            - name: PrefixAwareForwardingFilter
-              args:
-                prefix: /api-stress-test
+            - StripPrefix=1
+            - AddRequestHeader=X-Forwarded-Prefix, /api-stress-test
 
         - id: ichiro-family-tree
           uri: http://localhost:8081
           predicates:
             - Path=/ichiro-family-tree/**
           filters:
-            - name: PrefixAwareForwardingFilter
-              args:
-                prefix: /ichiro-family-tree
+            - StripPrefix=1
+            - AddRequestHeader=X-Forwarded-Prefix, /ichiro-family-tree
 
         - id: shortly
           uri: http://localhost:8082
           predicates:
             - Path=/shortly/**
           filters:
-            - name: PrefixAwareForwardingFilter
-              args:
-                prefix: /shortly
+            - StripPrefix=1
+            - AddRequestHeader=X-Forwarded-Prefix, /shortly
 
         - id: ichiro-walks
           uri: http://localhost:8085
           predicates:
             - Path=/ichiro-walks/**
           filters:
-            - name: PrefixAwareForwardingFilter
-              args:
-                prefix: /ichiro-walks
+            - StripPrefix=1
+            - AddRequestHeader=X-Forwarded-Prefix, /ichiro-walks
 
         - id: portainer
           uri: http://localhost:9000
           predicates:
             - Path=/portainer/**
           filters:
-            - name: PrefixAwareForwardingFilter
-              args:
-                prefix: /portainer
+            - StripPrefix=1
+            - AddRequestHeader=X-Forwarded-Prefix, /portainer
+
+        - id: grafana
+          uri: http://localhost:3000
+          predicates:
+            - Path=/grafana/**
+          filters:
+            - AddRequestHeader=X-Forwarded-Prefix, /grafana
+            - PreserveHostHeader
