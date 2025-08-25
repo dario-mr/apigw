@@ -38,7 +38,5 @@ scrape_configs:
           source: remote_ip
           db_type: city
     relabel_configs:
-      - action: labelkeep
-        regex: job|host|geoip_country_name|geoip_country_code
       - action: labeldrop
         regex: filename
