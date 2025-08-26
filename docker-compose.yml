@@ -20,3 +20,4 @@ volumes:
   loki_data:
   grafana_data:
   promtail_pos:
+  geoipupdate_data:
