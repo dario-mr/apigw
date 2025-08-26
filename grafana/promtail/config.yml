@@ -34,7 +34,7 @@ scrape_configs:
             uri:
             method:
       - geoip:
-          db: /etc/promtail/GeoLite2-City.mmdb
+          db: /usr/share/GeoIP/GeoLite2-City.mmdb
           source: remote_ip
           db_type: city
     relabel_configs:
