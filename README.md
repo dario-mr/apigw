@@ -15,7 +15,7 @@ Lightweight, self-contained API gateway with auto-TLS and path-prefix routing.
     - **Promtail**: tails Caddy’s JSON access logs, parses fields (status, uri, size, duration),
       enriches with GeoIP data, and ships to Loki. The GeoIP DB is automatically updated by the
       `geoipupdate` service.
-    - **Loki**: log database (label-based index) storing the ingested logs.
+    - **Loki**: log database storing the ingested logs.
     - **Grafana**: dashboards querying Loki for Caddy access logs. Served via Caddy under
       `/grafana/`.
 - **Backends**: `api-stress-test`, `ichiro-family-tree`, etc.
@@ -71,7 +71,6 @@ docker compose logs -f caddy gateway
 ```shell
 docker compose pull
 docker compose up -d --force-recreate
-# recreate specific container
 docker compose up -d --force-recreate --no-deps gateway
 ```
 
@@ -81,25 +80,20 @@ docker compose up -d --force-recreate --no-deps gateway
 docker image prune -f
 ```
 
-### Purge everything
-
-Stops and removes all containers, networks, and volumes that were created by `docker compose up`.
-
-Use carefully.
-
-```shell
-docker compose down --remove-orphans
-```
-
-### Caddyfile
+### Caddy
 
 ```shell
 # format
 caddy fmt --overwrite
 
-# from the container (easier with plugins)
-# validate
+# validate (from a running container)
 docker compose exec caddy caddy validate --config /etc/caddy/Caddyfile --adapter caddyfile
+
+# filter access logs of paths marked as unknown (404)
+docker compose exec caddy cat /var/log/caddy/access.log | jq -r 'select(.resp_headers["X-Unknown-Path"][0] == "1") | .request.uri'
+
+# filter access logs of paths with too many requests (429)
+docker compose exec caddy cat /var/log/caddy/access.log | jq -r 'select(.status == 429) | .request.uri'
 ```
 
 ### fail2ban
@@ -112,6 +106,7 @@ docker compose exec fail2ban fail2ban-client reload
 docker compose exec fail2ban fail2ban-client status
 docker compose exec fail2ban fail2ban-client status caddy-429
 docker compose exec fail2ban fail2ban-client status caddy-badpaths
+docker compose exec fail2ban fail2ban-client status caddy-unknownpaths
 
 # list banned IPs
 docker compose exec fail2ban fail2ban-client banned
