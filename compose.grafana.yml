@@ -7,6 +7,12 @@ services:
       - ./grafana/loki/local-config.yaml:/etc/loki/local-config.yaml:ro
       - loki_data:/loki
     networks: [ backend ]
+    healthcheck:
+      test: [ "CMD", "wget", "-qO-", "http://localhost:3100/ready" ]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    read_only: true
 
   promtail:
     image: grafana/promtail:2.9.4
@@ -23,6 +29,7 @@ services:
       - geoipupdate_data:/usr/share/GeoIP:ro
     networks: [ backend ]
     depends_on: [ loki, geoipupdate ]
+    read_only: true
 
   grafana:
     image: grafana/grafana:10.4.5
@@ -36,6 +43,12 @@ services:
     volumes:
       - grafana_data:/var/lib/grafana
       - ./grafana/provisioning:/etc/grafana/provisioning:ro
+    healthcheck:
+      test: [ "CMD", "wget", "-qO-", "http://localhost:3000/api/health" ]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    read_only: true
 
   geoipupdate:
     image: ghcr.io/maxmind/geoipupdate:v7.1.1

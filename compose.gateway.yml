@@ -12,3 +12,4 @@ services:
       - ichiro-family-tree
       - shortly
       - ichiro-walks
+    read_only: true
