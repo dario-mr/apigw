@@ -1,11 +1,11 @@
 services:
   portainer:
-    image: portainer/portainer-ce:latest
+    image: portainer/portainer-ce:2.33.1
     restart: unless-stopped
     command:
-      - --http-enabled                    # keep HTTP internally
+      - --http-enabled
       - --base-url
-      - /portainer                        # match spring gateway configuration
+      - /portainer
       - --trusted-origins
       - dariolab.com,www.dariolab.com
     expose:
@@ -17,3 +17,4 @@ services:
       - portainer_data:/data
     security_opt:
       - no-new-privileges:true
+    read_only: true
