@@ -82,17 +82,35 @@ docker image prune -f
 
 ### Caddy
 
+#### format
+
 ```shell
-# format
 caddy fmt --overwrite
+```
 
-# validate (from a running container)
+#### validate
+
+```shell
 docker compose exec caddy caddy validate --config /etc/caddy/Caddyfile --adapter caddyfile
+```
 
-# filter access logs of paths marked as unknown (404)
-docker compose exec caddy cat /var/log/caddy/access.log | jq -r 'select(.resp_headers["X-Unknown-Path"][0] == "1") | .request.uri'
+#### filter access logs by 404
 
-# filter access logs of paths with too many requests (429)
+```shell
+docker compose exec caddy cat /var/log/caddy/access.log \
+  | jq -r 'select((.resp_headers["X-Unknown-Path"]//[])[0] == "1")
+           | [.request.remote_ip, .request.uri] | @tsv' \
+  | awk -F'\t' '{c[$1 FS $2]++} END {for (k in c) print c[k] "\t" k}' \
+  | sort -t $'\t' -k2,2 -k1,1nr \
+  | awk -F'\t' 'BEGIN{ip=""} {
+        if ($2 != ip) { if (ip != "") print ""; ip=$2; print ip }
+        printf "    %5d  %s\n", $1, $3
+    }'
+```
+
+#### filter access logs by 429
+
+```shell
 docker compose exec caddy cat /var/log/caddy/access.log | jq -r 'select(.status == 429) | .request.uri'
 ```
 
