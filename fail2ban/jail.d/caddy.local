@@ -3,7 +3,11 @@
 bantime.increment = true
 bantime.factor    = 2
 bantime.formula   = bantime * (factor ** (failures - 1))
-bantime.maxtime   = 1w
+bantime.maxtime   = 4w
+dbpurgeage        = 12w
+usedns            = warn
+banaction         = iptables-multiport
+action            = %(banaction)s[name=%(__name__)s, port="80,443", protocol=tcp, chain=DOCKER-USER]
 
 # Ban IPs that hit too many 429s quickly
 [caddy-429]
@@ -13,7 +17,6 @@ logpath  = /var/log/caddy/access.log
 maxretry = 20
 findtime = 1m
 bantime  = 1h
-action   = iptables-multiport[name=caddy-429, port="80,443", chain=DOCKER-USER]
 
 # Ban common scanners/probers
 [caddy-badpaths]
@@ -22,15 +25,13 @@ filter   = caddy-badpaths
 logpath  = /var/log/caddy/access.log
 maxretry = 1
 findtime = 10m
-bantime  = 12h
-action   = iptables-multiport[name=caddy-badpaths, port="80,443", chain=DOCKER-USER]
+bantime  = 24h
 
 # Ban IPs that request non-allowed paths
 [caddy-unknownpaths]
 enabled  = true
 filter   = caddy-unknownpaths
 logpath  = /var/log/caddy/access.log
-maxretry = 10
-findtime = 10m
-bantime  = 12h
-action   = iptables-multiport[name=caddy-unknownpaths, port="80,443", chain=DOCKER-USER]
+maxretry = 5
+findtime = 5m
+bantime  = 1h
