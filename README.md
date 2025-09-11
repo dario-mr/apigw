@@ -94,7 +94,7 @@ caddy fmt --overwrite
 docker compose exec caddy caddy validate --config /etc/caddy/Caddyfile --adapter caddyfile
 ```
 
-#### filter access logs by 404
+#### filter access logs by 404, grouped by IP and path
 
 ```shell
 docker compose exec caddy cat /var/log/caddy/access.log \
@@ -106,6 +106,15 @@ docker compose exec caddy cat /var/log/caddy/access.log \
         if ($2 != ip) { if (ip != "") print ""; ip=$2; print ip }
         printf "    %5d  %s\n", $1, $3
     }'
+```
+
+#### filter access logs by 404, sorted by number of hits
+
+```shell
+docker compose exec caddy cat /var/log/caddy/access.log \
+  | jq -r 'select((.resp_headers["X-Unknown-Path"]//[])[0] == "1") | .request.uri' \
+  | awk '{c[$0]++} END {for (u in c) print c[u] "\t" u}' \
+  | sort -t $'\t' -k1,1nr
 ```
 
 #### filter access logs by 429

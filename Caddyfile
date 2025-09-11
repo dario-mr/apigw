@@ -20,7 +20,7 @@ dariolab.com, www.dariolab.com {
 
 	# Allowed paths
 	@allowed {
-		path / /index.html
+		path / /index.html /favicon.ico
 		path /assets/* /static/* /icons/* /locales/*
 		path /robots.txt /sitemap.xml /manifest.json /site.webmanifest
 		path /apple-touch-icon*.png /.well-known/acme-challenge/*
