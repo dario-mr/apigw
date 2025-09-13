@@ -7,7 +7,7 @@ services:
       - --base-url
       - /portainer
       - --trusted-origins
-      - dariolab.com,www.dariolab.com
+      - ${DOMAIN},www.${DOMAIN}
     expose:
       - "9000"
     networks:

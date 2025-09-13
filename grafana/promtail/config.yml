@@ -14,7 +14,7 @@ scrape_configs:
       - targets: [ localhost ]
         labels:
           job: caddy_access
-          host: ${PROMTAIL_HOST_LABEL}
+          host: ${DOMAIN}
           __path__: /var/log/caddy/access.log
     pipeline_stages:
       - json:

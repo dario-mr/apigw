@@ -7,30 +7,29 @@ Lightweight, self-contained API gateway with auto-TLS and path-prefix routing.
 - **Caddy**: automatic HTTP → HTTPS redirect, rate limiting, security headers, reverse-proxy to
   Gateway.
 - **Gateway**: Spring Cloud Gateway that routes requests to the right upstream apps.
-- **fail2ban**: watches caddy logs for bad behavior patterns and then blocks the IP at the OS
-  firewall level.
+- **fail2ban**: watches caddy logs for bad behavior patterns and then blocks the IP at firewall
+  level.
 - **Watchtower**: automatically pull new docker images.
-- **Portainer**: dashboard to manage docker containers.
+- **Portainer**: dashboard to manage docker containers. Served under `/portainer/`.
 - **Observability**:
-    - **Promtail**: tails Caddy’s JSON access logs, parses fields (status, uri, size, duration),
-      enriches with GeoIP data, and ships to Loki. The GeoIP DB is automatically updated by the
-      `geoipupdate` service.
+    - **Promtail**: tails Caddy's access logs, parses fields, enriches with GeoIP data, and ships to
+      Loki. The GeoIP DB is automatically updated by the `geoipupdate` service.
     - **Loki**: log database storing the ingested logs.
-    - **Grafana**: dashboards querying Loki for Caddy access logs. Served via Caddy under
-      `/grafana/`.
+    - **Grafana**: dashboards querying Loki for access logs. Served under `/grafana/`.
 - **Backends**: `api-stress-test`, `ichiro-family-tree`, etc.
 
 ## How to run
 
-1. Make sure the domain (e.g. `dariolab.com`, `www.dariolab.com`) is pointing to the server’s IP.
-2. Edit the config files if you need to change hostnames, paths, or behavior:
+1. Make sure your domain (e.g. `dariolab.com`) is pointing to your server's IP.
+2. Copy [.env.example](.env.example) to `.env` and edit the variables as needed.
+3. (Optional) Edit the config files if needed:
     - [docker-compose.yml](docker-compose.yml): orchestrates the whole stack (Caddy, gateway, and
-      backend services),
-      networking, and volume persistence.
+      backend services), networking, and volume persistence.
     - [Caddyfile](Caddyfile): defines the public domain, TLS/Let’s Encrypt setup, rate limits,
       security headers, and
       reverse-proxy rules into the gateway.
-    - [gateway](src/main/resources/application.yml): config for the Spring Cloud Gateway - route
+    - [gateway yaml](src/main/resources/application.yml): config for the Spring Cloud Gateway -
+      route
       prefixes, forwarding logic, and upstream service addresses.
     - [ban rules](fail2ban/jail.d/caddy.local): configures IP banning rules.
 
@@ -66,12 +65,14 @@ docker buildx build \
 docker compose logs -f caddy gateway
 ```
 
-### Update docker images
+### Recreate containers
 
 ```shell
 docker compose pull
+
 docker compose up -d --force-recreate
 docker compose up -d --force-recreate --no-deps gateway
+docker compose --env-file .env up -d --force-recreate --no-deps gateway
 ```
 
 ### Clean unused images
