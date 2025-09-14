@@ -1,0 +1,24 @@
+<configuration>
+  <appender name="JSON" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+      <providers>
+        <timestamp/>
+        <logLevel/>
+
+        <!-- Replace logger_name with only the class name -->
+        <pattern>
+          <pattern>{"logger_name":"%logger{0}"}</pattern>
+        </pattern>
+
+        <message/>
+        <mdc/>
+        <context/>
+        <stackTrace/>
+      </providers>
+    </encoder>
+  </appender>
+
+  <root level="INFO">
+    <appender-ref ref="JSON"/>
+  </root>
+</configuration>
