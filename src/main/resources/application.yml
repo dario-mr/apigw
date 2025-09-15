@@ -2,8 +2,8 @@ server:
   port: 8080
 
 spring:
-  main:
-    web-application-type: reactive
+  application.name: apigw
+  main.web-application-type: reactive
   cloud:
     gateway.server.webflux:
       routes:
@@ -60,3 +60,11 @@ spring:
           filters:
             - AddRequestHeader=X-Forwarded-Prefix, /grafana
             - PreserveHostHeader
+management:
+  endpoints:
+    web.exposure.include: health,info,prometheus
+  endpoint:
+    health.probes.enabled: true
+  metrics:
+    tags:
+      application: ${spring.application.name}
