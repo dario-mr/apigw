@@ -60,6 +60,14 @@ spring:
           filters:
             - AddRequestHeader=X-Forwarded-Prefix, /grafana
             - PreserveHostHeader
+
+        - id: htmx-demo
+          uri: http://htmx-demo:8087
+          predicates:
+            - Path=/htmx-demo/**
+          filters:
+            - StripPrefix=1
+            - AddRequestHeader=X-Forwarded-Prefix, /htmx-demo
 management:
   endpoints:
     web.exposure.include: health,info,prometheus
