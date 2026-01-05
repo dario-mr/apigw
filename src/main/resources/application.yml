@@ -68,6 +68,14 @@ spring:
           filters:
             - StripPrefix=1
             - AddRequestHeader=X-Forwarded-Prefix, /htmx-demo
+
+        - id: wordle-duel-service
+          uri: http://wordle-duel-service:8088
+          predicates:
+            - Path=/wordle-duel-service/**
+          filters:
+            - StripPrefix=1
+            - AddRequestHeader=X-Forwarded-Prefix, /wordle-duel-service
 management:
   endpoints:
     web.exposure.include: health,info,prometheus
