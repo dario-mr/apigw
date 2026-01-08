@@ -70,12 +70,30 @@ spring:
             - AddRequestHeader=X-Forwarded-Prefix, /htmx-demo
 
         - id: wordle-duel-service
+          order: 1
           uri: http://wordle-duel-service:8088
           predicates:
             - Path=/wordle-duel-service/**
           filters:
             - StripPrefix=1
             - AddRequestHeader=X-Forwarded-Prefix, /wordle-duel-service
+
+        - id: wordle-duel-service-ws
+          order: 0
+          uri: ws://wordle-duel-service:8088
+          predicates:
+            - Path=/wordle-duel-service/ws, /wordle-duel-service/ws/**
+          filters:
+            - StripPrefix=1
+            - AddRequestHeader=X-Forwarded-Prefix, /wordle-duel-service
+
+        - id: wordle-duel
+          uri: http://wordle-duel:80
+          predicates:
+            - Path=/wordle-duel, /wordle-duel/, /wordle-duel/**
+          filters:
+            - StripPrefix=1
+            - AddRequestHeader=X-Forwarded-Prefix, /wordle-duel
 management:
   endpoints:
     web.exposure.include: health,info,prometheus
